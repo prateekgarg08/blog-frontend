@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useState } from "react";
 import Header from "../../components/Header";
 import { login } from "../api/auth";
@@ -80,9 +81,9 @@ export default function Login() {
 
             <p className="mt-10 text-center text-sm text-gray-500">
               Not a member?{" "}
-              <a href="#" className="font-semibold leading-6 text-[#980000] hover:text-[#d90202]">
+              <Link href="#" className="font-semibold leading-6 text-[#980000] hover:text-[#d90202]">
                 Register here
-              </a>
+              </Link>
             </p>
           </div>
         </div>
