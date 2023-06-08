@@ -21,7 +21,7 @@ function Comment({ comment }: CommentProp) {
         </div> */}
       </div>
       <div className="p-4 space-y-2 text-sm text-gray-600">
-        <p>{comment.msg}</p>
+        <p>{`${comment.msg}`}</p>
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ function LeaveComment({ setShow }) {
     console.log(username, email, msg);
     try {
       const comment = await postComment(username, email, msg, slug);
-      // router.reload();
+      router.reload();
     } catch (err) {
       console.log(err);
     }

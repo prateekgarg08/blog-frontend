@@ -1,15 +1,18 @@
 import { useState } from "react";
 import Header from "../../components/Header";
 import { login } from "../api/auth";
+import { useRouter } from "next/router";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const token = await login(email, password);
       console.log(token);
+      localStorage.setItem("token", JSON.stringify(token));
+      router.push("/admin");
     } catch (error) {
       console.log(error);
     }

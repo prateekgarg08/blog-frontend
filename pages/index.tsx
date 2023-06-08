@@ -13,10 +13,7 @@ import Header from "../components/Header";
 import { getPublishedPosts } from "./api/posts.js";
 
 export default function Home({ pageData }) {
-  const router = useRouter();
-  const page: number = Number(router.query.page);
-  const [currentPage, setCurrentPage]: [number, any] = useState(page || 1);
-  console.log(page);
+  // console.log(page);
   return (
     <div className={styles.container}>
       <Head>
