@@ -9,8 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cloudinary/react": "^1.11.2",
+    "@cloudinary/url-gen": "^1.10.1",
+    "@tinymce/tinymce-react": "^4.3.0",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
+    "cloudinary-react": "^1.8.1",
+    "framer-motion": "^10.12.16",
     "next": "^13.4.4",
     "postcss": "^8.4.24",
     "react": "^18.2.0",

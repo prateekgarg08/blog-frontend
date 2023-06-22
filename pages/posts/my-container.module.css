@@ -1,0 +1,8 @@
+/* Custom CSS */
+@layer utilities {
+  .my-container h1,
+  .my-container h2,
+  .my-container h3 {
+    @apply font-normal text-2xl; /* Apply default font weight and size */
+  }
+}

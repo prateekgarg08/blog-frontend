@@ -3,6 +3,7 @@ import { postComment } from "../pages/api/posts";
 import { useRouter } from "next/router";
 
 function LeaveComment({ setShow }) {
+  console.log(setShow);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");

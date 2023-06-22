@@ -5,7 +5,7 @@ import "../axios";
 import axios from "axios";
 import { Post } from "../types/post";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import BlogCard from "../components/BlogCard";
 import Pagination from "../components/Pagination";
@@ -14,6 +14,14 @@ import { getPublishedPosts } from "./api/posts.js";
 
 export default function Home({ pageData }) {
   // console.log(page);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    if (token) {
+      router.push("/admin");
+    }
+  }, []);
   return (
     <div className={styles.container}>
       <Head>
@@ -23,8 +31,8 @@ export default function Home({ pageData }) {
       </Head>
       <Header />
       <div className="flex flex-col gap-2 items-center py-10 px-2">
-        {pageData.posts.map((post: Post) => (
-          <BlogCard key={post._id} {...post} />
+        {pageData.posts.map((post: Post, index) => (
+          <BlogCard key={post._id} {...post} link={`/posts/${post._id}`} index={index} />
         ))}
         <Pagination totalPages={pageData.totalPages} currentPage={pageData.page} />
       </div>

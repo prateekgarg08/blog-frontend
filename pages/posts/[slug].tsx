@@ -8,6 +8,9 @@ import { Comment as CommentInterface } from "../../types/comment";
 import LeaveComment from "../../components/LeaveComment";
 import { getPost } from "../api/posts";
 import Comment from "../../components/Comment";
+import { motion, AnimatePresence } from "framer-motion";
+import CloudImage from "../../components/CloudImage";
+
 export default function BlogPost({ postData }) {
   const router = useRouter();
   const slug = router.query.slug;
@@ -39,18 +42,38 @@ export default function BlogPost({ postData }) {
           <span className="text-sm ">
             {MONTH[month]} {date}, {year}
           </span>
-          <p className="mt-5">{postData.post.description}</p>
+          {postData.post.image_public_id && (
+            <motion.div
+              className="flex w-full justify-center"
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <CloudImage image_public_id={postData.post.image_public_id} />
+            </motion.div>
+          )}
+          <div className="my-container" dangerouslySetInnerHTML={{ __html: postData.post.description }}></div>
           <div className="mt-10 flex flex-col items-start gap-5">
             <div className="flex w-full justify-between items-center">
               <h2 className="text-2xl font-bold">Comments</h2>
               <button
-                onClick={() => setShow(true)}
+                onClick={() => setShow(!show)}
                 className=" px-4 py-2 font-bold rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-[#980000] focus:ring-[#980000] hover:ring-[#980000] text-gray-50"
               >
-                Add Comment
+                {!show ? `Add Comment` : "Hide"}
               </button>
             </div>
-            {show && <LeaveComment setShow={setShow} />}
+            <AnimatePresence>
+              {show && (
+                <motion.div
+                  className="w-full"
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0 }}
+                >
+                  <LeaveComment setShow={setShow} />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
           <div className="flex flex-col gap-2 py-5">
             {postData.post.comments.map((comment: CommentInterface, index: number) => {
@@ -66,7 +89,7 @@ export default function BlogPost({ postData }) {
 
 export async function getServerSideProps(context: any) {
   const postData = await getPost(context.params.slug);
-  console.log(postData.post.comments);
+  console.log(postData.post);
   return {
     props: {
       postData,

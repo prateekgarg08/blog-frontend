@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { login } from "../api/auth";
 import { useRouter } from "next/router";
+import { motion } from "framer-motion";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,11 +19,34 @@ export default function Login() {
       console.log(error);
     }
   };
+
+  const variants = {
+    hidden: { y: 100, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        delay: 0.3,
+      },
+    },
+  };
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    if (token) {
+      router.push("/admin");
+    }
+  }, []);
   return (
     <>
       <Header />
       <div className="flex min-h-full flex-1 flex-col justify-center items-center px-6 py-12 lg:px-8">
-        <div className="w-full max-w-xl flex flex-col gap-2  rounded-2xl shadow-2xl py-5 px-6">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={variants}
+          className="w-full max-w-xl flex flex-col gap-2  rounded-2xl shadow-2xl py-5 px-6"
+        >
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <h2 className="mt-3 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Login to your account
@@ -86,7 +110,7 @@ export default function Login() {
               </Link>
             </p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </>
   );
