@@ -7,4 +7,5 @@ export interface Post {
   isPublished: boolean;
   comments: Comment[];
   _id: string;
+  image_public_id: string;
 }

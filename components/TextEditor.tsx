@@ -14,7 +14,7 @@ export default function TextEditor({ value, setValue }) {
       <Editor
         // apiKey={process.env.TINY_MCE_KEY}
         onInit={(evt, editor) => (editorRef.current = editor)}
-        initialValue="<p>This is the initial content of the editor.</p>"
+        value={value}
         init={{
           // width: 500,
           // height: 450,

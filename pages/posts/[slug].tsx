@@ -1,6 +1,6 @@
 import "../../axios";
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import axios from "axios";
 import { Post } from "../../types/post";
 import Header from "../../components/Header";
@@ -10,6 +10,8 @@ import { getPost } from "../api/posts";
 import Comment from "../../components/Comment";
 import { motion, AnimatePresence } from "framer-motion";
 import CloudImage from "../../components/CloudImage";
+import { useAuthContext } from "../../contexts/authContext";
+import { deletePost, updatePost } from "../api/admin";
 
 export default function BlogPost({ postData }) {
   const router = useRouter();
@@ -18,6 +20,17 @@ export default function BlogPost({ postData }) {
   const year = d && d[0];
   const month = d && d[1];
   const date = d && d[2].split("T")[0];
+  const { isLogged } = useAuthContext();
+  const handleDelete = async () => {
+    const data = await deletePost(slug);
+    console.log(data);
+    router.push("/admin");
+  };
+  const handlePublish = async () => {
+    const data = await updatePost(slug, { isPublished: true });
+    console.log(data);
+    router.reload();
+  };
   const MONTH = {
     "01": "Janurary",
     "02": "Feburary",
@@ -38,6 +51,29 @@ export default function BlogPost({ postData }) {
       <Header />
       <div className=" flex flex-col items-center">
         <div className="container max-w-6xl px-2 py-10 mx-auto">
+          <div className="flex w-full gap-3 justify-end items-center">
+            {isLogged && (
+              <>
+                <button className=" px-4 py-2 font-bold rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-[#980000] focus:ring-[#980000] hover:ring-[#980000] text-gray-50">
+                  Edit
+                </button>
+                {!postData.post.isPublished && (
+                  <button
+                    onClick={handlePublish}
+                    className=" px-4 py-2 font-bold rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-[#980000] focus:ring-[#980000] hover:ring-[#980000] text-gray-50"
+                  >
+                    Publish
+                  </button>
+                )}
+                <button
+                  onClick={handleDelete}
+                  className=" px-4 py-2 font-bold rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-[#980000] focus:ring-[#980000] hover:ring-[#980000] text-gray-50"
+                >
+                  Delete
+                </button>
+              </>
+            )}
+          </div>
           <h1 className="text-3xl font-bold">{postData.post.title}</h1>
           <span className="text-sm ">
             {MONTH[month]} {date}, {year}
@@ -48,10 +84,10 @@ export default function BlogPost({ postData }) {
               initial={{ opacity: 0, y: 100 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <CloudImage image_public_id={postData.post.image_public_id} />
+              <CloudImage image_public_id={postData.post.image_public_id} isThum={false} />
             </motion.div>
           )}
-          <div className="my-container" dangerouslySetInnerHTML={{ __html: postData.post.description }}></div>
+          <div className="my-container my-5" dangerouslySetInnerHTML={{ __html: postData.post.description }}></div>
           <div className="mt-10 flex flex-col items-start gap-5">
             <div className="flex w-full justify-between items-center">
               <h2 className="text-2xl font-bold">Comments</h2>
@@ -88,11 +124,18 @@ export default function BlogPost({ postData }) {
 }
 
 export async function getServerSideProps(context: any) {
-  const postData = await getPost(context.params.slug);
-  console.log(postData.post);
-  return {
-    props: {
-      postData,
-    },
-  };
+  try {
+    const postData = await getPost(context.params.slug);
+
+    console.log(postData.post);
+    return {
+      props: {
+        postData,
+      },
+    };
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
 }

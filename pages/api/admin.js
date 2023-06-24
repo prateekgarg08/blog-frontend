@@ -40,3 +40,11 @@ export const newPost = async (title, description, file) => {
     return err
   }
 }
+export const updatePost = async (slug, userInput) => {
+  const { data } = await axios.put(`/admin/post/${slug}`, userInput)
+  return data
+}
+export const deletePost = async (slug) => {
+  const { data } = await axios.delete(`/admin/post/${slug}`)
+  return data
+}

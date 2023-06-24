@@ -2,27 +2,28 @@ import Link from "next/link";
 import React from "react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-
+import { useAuthContext } from "../contexts/authContext";
 function Header() {
   const router = useRouter();
+  const { isLogged, setIsLogged } = useAuthContext();
 
+  // console.log(auth);
+  console.log(isLogged);
   const logout = () => {
     localStorage.removeItem("token");
     router.push("/");
+    setIsLogged(false);
   };
 
-  const [token, setToken] = useState<string | null>(null);
-  useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token"));
-    if (token) {
-      setToken(token);
-      // router.push("/admin");
-    }
-  }, []);
   return (
     <header className="w-full p-4 mb-5 bg-gray-100 text-gray-800">
       <div className="container flex justify-between h-16 mx-auto">
-        <Link rel="noopener noreferrer" href="/" aria-label="Back to homepage" className="flex items-center p-2">
+        <Link
+          rel="noopener noreferrer"
+          href={isLogged ? "/admin" : "/"}
+          aria-label="Back to homepage"
+          className="flex items-center p-2"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
@@ -35,7 +36,7 @@ function Header() {
         </Link>
 
         <div className="items-center flex-shrink-0 flex">
-          {token ? (
+          {isLogged ? (
             <button onClick={logout} className="self-center px-8 py-3 font-semibold rounded bg-[#980000] text-gray-50">
               Logout
             </button>

@@ -4,7 +4,13 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'ibm': ['IBM Plex Sans', 'sans-serif'],
+        'noto': ['Noto Sans', 'sans-serif'],
+        'pt-serif': ['PT Serif', 'sans-serif']
+      }
+    },
   },
   plugins: [],
 }
