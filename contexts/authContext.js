@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/router"
 import "../axios";
 
-const AuthContext = createContext({ isLogged: false, token: "", setToken: () => { }, setIsLogged: () => { } });
+const AuthContext = createContext({ isLogged: false, token: "", setToken: (any) => { }, setIsLogged: (any) => { } });
 
 const AuthProvider = ({ children }) => {
   const [isLogged, setIsLogged] = useState(false);
