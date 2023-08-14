@@ -11,15 +11,17 @@ import BlogCard from "../components/BlogCard";
 import Pagination from "../components/Pagination";
 import Header from "../components/Header";
 import { getPublishedPosts } from "./api/posts.js";
+import { useAuthContext } from "../contexts/authContext";
 
 export default function Home({ pageData }) {
   // console.log(page);
   const router = useRouter();
-
+  const { setToken } = useAuthContext();
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token"));
+    let token = localStorage.getItem("token");
     if (token) {
-      router.push("/admin");
+      token = JSON.parse(token);
+      setToken("token");
     }
   }, []);
   return (

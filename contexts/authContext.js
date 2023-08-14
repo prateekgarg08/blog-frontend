@@ -1,11 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/router"
 import "../axios";
 
 const AuthContext = createContext({ isLogged: false });
 
 const AuthProvider = ({ children }) => {
   const [isLogged, setIsLogged] = useState(false);
+
   const checkToken = async (token) => {
 
     try {
@@ -29,9 +31,13 @@ const AuthProvider = ({ children }) => {
 
       (async () => {
         setIsLogged(await checkToken(token));
+
       })();
     }
+
   }, [token]);
+
+
   return <AuthContext.Provider value={{ isLogged, setIsLogged, token, setToken }}>{children}</AuthContext.Provider>;
 };
 export const useAuthContext = () => {

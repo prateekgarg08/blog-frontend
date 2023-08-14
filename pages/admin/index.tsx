@@ -9,6 +9,7 @@ import Header from "../../components/Header";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { justify } from "@cloudinary/url-gen/qualifiers/textAlignment";
+import { useAuthContext } from "../../contexts/authContext";
 const container = {
   hidden: { opacity: 1, scale: 0 },
   visible: {
@@ -30,7 +31,8 @@ function Index() {
   const router = useRouter();
   const [isLoading, setLoading] = useState(true);
   const [postData, setPostData] = useState<PostData | null>();
-  const [pub, setPub] = useState<boolean>(false);
+  const [pub, setPub] = useState<boolean>(true);
+  const { token } = useAuthContext();
   useEffect(() => {
     (async () => {
       const data = await getAllPosts();
@@ -39,7 +41,11 @@ function Index() {
       setLoading(false);
     })();
   }, []);
-
+  useEffect(() => {
+    if (!token) {
+      router.push("/");
+    }
+  }, [token]);
   return (
     <div className="w-full flex flex-col  items-center min-h-[100vh]">
       <Head>
@@ -94,7 +100,7 @@ function Index() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2 w-full px-2">
               {postData &&
                 postData?.posts
-                  .filter((obj) => {
+                  ?.filter((obj) => {
                     if (pub) {
                       return obj.isPublished;
                     } else {

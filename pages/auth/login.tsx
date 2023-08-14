@@ -10,14 +10,15 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const { setToken } = useAuthContext();
-  console.log(setToken);
   const handleSubmit = async (e) => {
+    console.log(setToken);
     e.preventDefault();
     try {
       const token = await login(email, password);
 
       localStorage.setItem("token", JSON.stringify(token));
       setToken(token);
+      console.log(token);
       router.push("/admin");
     } catch (error) {
       console.log(error);
